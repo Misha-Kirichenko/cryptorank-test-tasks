@@ -1,0 +1,16 @@
+{
+  "name": "task-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Misha Kirichenko",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node dist/index.js",
+    "postinstall": "npm run build"
+  }
+}
