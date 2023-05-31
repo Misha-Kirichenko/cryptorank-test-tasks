@@ -32,7 +32,7 @@ const coinsAlloc = (
   const combinations: string[][] = [];
   findCombinations([], coinsAvailable, combinations);
 
-  if (combinations.length > 0) {
+  if (combinations.length) {
     return combinations[0];
   }
 
