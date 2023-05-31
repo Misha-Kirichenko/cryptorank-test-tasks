@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { ConvertParamsDTO } from './dto';
-import { roundCurrency } from 'src/utils';
-import { Convertation } from './interfaces/convertation.interface';
+import { calculateConversion, roundCurrency } from 'src/utils';
+import { ConversionResult } from './interfaces/conversionResult';
 import { CacheService } from './cache.service';
 
 @Injectable()
@@ -38,21 +38,23 @@ export class CurrencyService {
 
       return priceInUSD;
     } catch (_) {
-      throw new BadRequestException('Failed to fetch data from the API.');
+      throw new BadRequestException('Failed to fetch data from the API');
     }
   }
 
-  public async convert(queryParams: ConvertParamsDTO): Promise<Convertation> {
+  public async convert(
+    queryParams: ConvertParamsDTO,
+  ): Promise<ConversionResult> {
     const { from, to = 'tether', amount = 1 } = queryParams;
-    const fromCurrencyUSDPrice =
-      (await this.getCurrencyPriceInUSD(from)) * amount;
+    const fromCurrencyUSDPrice = await this.getCurrencyPriceInUSD(from);
     const toCurrencyUSDPrice = await this.getCurrencyPriceInUSD(to);
 
-    const rounded = roundCurrency(
-      to === 'usd'
-        ? fromCurrencyUSDPrice
-        : fromCurrencyUSDPrice / toCurrencyUSDPrice,
-    );
-    return { amount, from, to, result: rounded };
+    return calculateConversion({
+      from,
+      to,
+      fromCurrencyUSDPrice,
+      toCurrencyUSDPrice,
+      amount,
+    });
   }
 }

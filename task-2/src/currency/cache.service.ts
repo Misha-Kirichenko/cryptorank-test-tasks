@@ -1,12 +1,11 @@
-/* Если бы в задание нужно было ещё получить все курсы валют разом,
-то можно бы было использовать Redis и хранить все курсы валют относительно $ 
-в одном ключе в виде объекта. 
-А в данном случае достаточно просто хранить данные каждой валюты в отдельном ключе. 
-В приложении всего 1 эндпоинт и мы только конвертируем одну валюту в другую, 
-поэтому хранить все валюты в ключе в данном случае считаю избыточным, так как 
-мы никогда не запросим все курсы разом
+/* If the task also needed to get all currency rates at once,
+it would be possible to use Redis and store all currency rates relative to $ 
+in one key in the form of an object. 
+But in this case it is enough to store data of each currency in a separate key. 
+There is only 1 endpoint in the application and we are only converting one currency to another, 
+so keeping all of the currencies in a key is redundant in this case, because 
+we will never request all rates at once
 */
-
 import { Injectable, Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
