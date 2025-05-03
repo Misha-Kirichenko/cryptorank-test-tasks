@@ -1,15 +1,15 @@
 ## Backend
 
-### 1. Решить задачу с распределением монет
-В качестве приза участникам конкурса предлагаются монеты.
+### 1. Solve the Coin Distribution Problem
+As a prize, participants in the contest are offered coins.
 
-У организации проводившей конкурс доступно 3 вида монет: `ETH`, `TRON`, `MATIC`. Для каждой доступно  только определенное количество.
+The organization hosting the contest has 3 types of coins: `ETH`, `TRON`, `MATIC`, each with a limited quantity.
 
-У каждого участника спросили, какую монету он бы хотел получить. И если участник не был уверен, он мог выбрать две **смежные** монеты . Это означает, что любая из монет подходит участнику.
+Each participant was asked which coin they would like to receive. If the participant was unsure, they could choose two **adjacent** coins. This means either of the two coins would work for the participant.
 
-Вам необходимо рассчитать, возможно ли подарить каждому участнику монеты, которые они запросили, и верните пример такой договоренности.
+You need to calculate whether it's possible to give each participant the coin they requested and return an example of such an arrangement.
 
-Пример:
+Example:
 ```
 Input:
 Coin available: { ETH: 4, TRON: 5, MATIC: 1 }
@@ -22,73 +22,71 @@ Answer:
 [ETH, ETH, ETH, ETH, TRON, TRON, MATIC]
 ```
 
-**Дополнения:**
-- Реализация только на TypeScript
-- Не нужно задумываться, какой эквивалент награды в USD, можете представить, что это фиксированная сумма.
-- Расстановка вариантов может быть любая(например: `'TRON/ETH'` или `'ETH/TRON'`), но на приоритет для пользователя это не влияет, достаточно закрыть любой из возможных
-- Вам нужно учитывать, что в зависимости от того, какую монету вы отдадите в комбинированном варианте, вам может хватить, а может не хватить монет на дальнейшее распределение  
-  Например у вас есть: `ETH: 1, TRON: 1 MATIC: 1`, а требуется `ETH/TRON, ETH, MATIC`  
-  Если для `ETH/TRON` вы отдадите `ETH`, вам не хватит `ETH`, чтобы закрыть второй вариант, но если вы в первом варианте, отдадите `TRON`, то запрос будет выполнен  
-- Если распределить токены не получается, функция должна вернуть `NULL`
-- Функция:  
-  Первым аргументом должна принимать объект: `{ ETH: 4, TRON: 5, MATIC: 1 }`  
-  Вторым массив запроса: `['ETH', 'ETH', 'ETH/TRON', 'TRON/ETH', 'TRON/MATIC', 'TRON', 'MATIC']`  
-  Должна вернуть, либо `NULL`, либо массив `['ETH', 'TRON', ...]`  
-  Это необходимо для корректной работы тестов.
-- Необязательно: Постарайтесь не завязываться на конкретные примитивы и их варианты.  
-  Будет круто если я смогу поменять одну из монет на другую, и ваша функция продолжит работать.  
-  Или увеличиться количество возможных смежных валют, и у пользователя будет выбор не из 2, а из 3 вариантов, а функция все равно отработает, без изменения в коде =)  
-
+**Additions:**
+- Implementation should be in TypeScript only.
+- Don't worry about the USD equivalent for the prize; you can assume it's a fixed amount.
+- The order of the coin types can vary (e.g., `'TRON/ETH'` or `'ETH/TRON'`), but it doesn't affect the user's priority as long as any of the available options are provided.
+- You must consider that depending on which coin you give in a combined request, you may or may not have enough coins for subsequent requests.  
+  For example, you have: `ETH: 1, TRON: 1, MATIC: 1`, but the requests are `ETH/TRON, ETH, MATIC`.  
+  If you give `ETH` for `ETH/TRON`, you won't have enough `ETH` to fulfill the second request, but if you give `TRON` in the first request, the request can be fulfilled.
+- If the distribution of coins is not possible, the function should return `NULL`.
+- Function:  
+  The first argument should be an object: `{ ETH: 4, TRON: 5, MATIC: 1 }`  
+  The second argument should be an array of requests: `['ETH', 'ETH', 'ETH/TRON', 'TRON/ETH', 'TRON/MATIC', 'TRON', 'MATIC']`  
+  It should return either `NULL` or an array like `['ETH', 'TRON', ...]`.  
+  This is necessary for the correct functioning of the tests.
+- Optional: Try not to tie the implementation to specific primitive types.  
+  It would be great if I could swap one coin for another, and your function would still work.  
+  Or increase the number of possible adjacent coins so the user can choose from 2 or 3 options, and the function still works without any changes in the code.  
 
 ---
 
-### 2. Nest.js - Конвертер криптовалютных пар
+### 2. Nest.js - Cryptocurrency Pair Converter
 
-Напишите небольшое приложение на Nest.js, которое будет обрабатывать запросы на конвертацию одной валюты в другую.
+Write a small application in Nest.js that will handle requests to convert one currency to another.
 
-Поинт:  
+Endpoint:  
 `/currency/convert/?from={string}&to={string}&amount={number}`  
 
-Параметры: 
-- `from` - ключ монеты из которой конвертируем
-- `to` - ключ монеты в которую конвертируем. Необязателен, По умолчанию `tether`
-- `amount` - количество монет которое конвертируем. Необязателен, По умолчанию `1`
+Parameters:  
+- `from` - the coin key to convert from
+- `to` - the coin key to convert to. Optional, defaults to `tether`
+- `amount` - the amount of coins to convert. Optional, defaults to `1`
 
-Пример запроса:  
+Example request:  
 `/currency/convert/?from=ethereum&to=bitcoin&amount=100`
 
-Пример ответа:  
+Example response:  
 `{ "amount": 100, "from": "ethereum", "to": "bitcoin", "result": 6.3 }`
 
+Cryptocurrency prices can be obtained from the API:  
+https://tstapi.cryptorank.io/v0/coins/prices/  
+All prices are quoted in USD.
 
-Цены криптовалют можно получить по API:
-https://tstapi.cryptorank.io/v0/coins/prices/   
-Все цены указаны в USD
-
-**Дополнения:**
-- Вам нужно будет учесть потерю точности при конвертации.  
-  Например, если у вас есть 1 bitcoin, и вы хотите конвертировать его в монету с очень маленькой ценой  
-  Ну и базовые проблемы JS с числами, например: `0.1 + 0.2 = 0.30000000000000004`
-- Обработайте возможные значения для query параметров
-- Вынесите мат. расчет чисел в отдельную юнит функцию, покройте тестами используя Jest. 
-  Сервисы тестировать не нужно
-- Самое плохое, что может произойти - это отдать/посчитать неверные данные.  
-  Особенно, если вы отдадите клиенту значения: NaN, Infinity и т.д.
-- Обработайте варианты, если в функцию будут переданы неверные значения.   
-  Такое часто происходит в реальных проектах, потому-что TS не работает в рантайме
+**Additions:**
+- You will need to account for precision loss during conversion.  
+  For example, if you have 1 bitcoin and you want to convert it to a coin with a very small price,  
+  and also the basic JS number issues, like: `0.1 + 0.2 = 0.30000000000000004`.
+- Handle possible values for query parameters.
+- Extract mathematical calculations into a separate utility function and cover it with tests using Jest.  
+  There's no need to test services.
+- The worst-case scenario is returning/processing incorrect data.  
+  Especially if you return values like NaN, Infinity, etc.
+- Handle cases where invalid values are passed to the function.  
+  This often happens in real projects because TypeScript doesn’t work at runtime.
 
 ---
 
-**Для реализации используйте:**
+**For implementation, use:**
 - [Nest.js](https://nestjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)  
-- Типизация без использования `any` - обязательна
-- [class-validator](https://www.npmjs.com/package/class-validator) - для query параметров
-- По возможности не используйте примитивы, создавайте константы и enum/ы
-- [Jest](https://jestjs.io/ru/)
-- Библиотеки на ваше усмотрение(С расчетом на то, что вы бы использовали их в продакшене)
-- Документируйте сложный код
-- Файл с реализацией функции из первого задания, оставьте в одном репо со вторым заданием
+- Strong typing without using `any` - mandatory
+- [class-validator](https://www.npmjs.com/package/class-validator) - for query parameters
+- Avoid using primitives whenever possible, use constants and enums
+- [Jest](https://jestjs.io/)
+- Libraries of your choice (with the assumption that you would use them in production)
+- Document complex code
+- Keep the implementation of the function from the first task in the same repository as the second task
 
-**Плюсом будет:**
-- Использование Swagger для документации вашего поинта API во втором задании
+**Bonus points for:**
+- Using Swagger to document your API endpoint in the second task
